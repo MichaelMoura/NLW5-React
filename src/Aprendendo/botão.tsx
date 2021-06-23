@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 
-const Button = ()=> {
+const botao = ()=> {
     const [counter,setCounter] = useState(0);
 
     function incremental(){
@@ -14,4 +14,4 @@ const Button = ()=> {
     )
 }
 
-export default Button;
+export default botao;
