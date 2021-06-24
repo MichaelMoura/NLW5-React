@@ -8,6 +8,7 @@ type User = {
 }
 
 //Ele pode ser um user ou undefined
+//Estamos dizendo que o signInWithGoogle é uma promise pois ele é uma função assincrona
 type AuthContextType={
     user: User | undefined;
     signInWithGoogle: ()=>Promise<void>;
@@ -24,7 +25,9 @@ export function AuthContextProvider(props:AuthContextProviderProps){
     
     const [user,setUser] = useState<User>();
 
+    //Responsável por guardar o usuário no sistema após o cliente sair do site
     useEffect(()=>{
+        //é recomendados guaradar o componente em uma variável e colocá-lo no return
         const unSubscribe = auth.onAuthStateChanged(user=>{
             if(user){
                 const {displayName, photoURL, uid} = user;

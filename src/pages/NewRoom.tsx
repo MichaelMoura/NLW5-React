@@ -1,5 +1,5 @@
 //Link que ajuda a fazer as rotas da nossa aplicação
-import { Link } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 
 //meu contexto de login
 import { useAuth } from '../hooks/useAuth'
@@ -13,11 +13,36 @@ import '../styles/auth.scss'
 
 //componente button
 import { Button } from '../components/Button'
+import { FormEvent, useState } from 'react'
+import { database } from '../services/firebase'
 
 
 export function NewRoom(){
 
-    //const {user} = useAuth();
+    const {user} = useAuth();
+    const history = useHistory()
+    const [newRoom,setNewRoom] = useState('')
+
+    async function handleCreateRoom(event: FormEvent){
+        //impede da página recarregar 
+        event.preventDefault()
+
+        //vai retirar os espaços do campo de texto
+        if(newRoom.trim()===''){
+            return 
+        }
+        
+
+        //vai procurar no banco de dados uma tabela rooms
+        const roomRef = database.ref('rooms')
+
+        const firebaseRoom = await roomRef.push({
+            title: newRoom,
+            authorId: user?.id,
+        })
+
+        history.push(`/rooms/${firebaseRoom.key}`)
+    }
 
     return(
         <div id='page-auth'>
@@ -31,10 +56,12 @@ export function NewRoom(){
                 <div className='main-content'>
                     <img src={logoImg} alt="letmeask" />
                     <h2>Crie uma nova sala</h2>
-                    <form action="">
+                    <form action="" onSubmit={handleCreateRoom}>
                         <input 
                             type="text" 
                             placeholder='Nome da sala'
+                            onChange={event => setNewRoom(event.target.value)}
+                            value={newRoom}
                         />
 
                         <Button type='submit'>
