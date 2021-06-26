@@ -42,7 +42,7 @@ export function useRoom(roomId:string){
             //vamos pegar o valor dessa questão
             const databaseRoom = room.val();
 
-            const firebaseQuestions:FirebaseQuestions = databaseRoom.questions;
+            const firebaseQuestions = (databaseRoom.questions as FirebaseQuestions) ?? {};
 
             //O object entries vai mudar meu objeto para um array por exemplo [[name,michael],[old:20]]
             //Nesse caso temos aquela tipagem estranha de um objeto e um json, então vamos usar a desestruturação
